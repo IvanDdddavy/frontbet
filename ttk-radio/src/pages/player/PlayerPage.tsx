@@ -207,13 +207,25 @@ export function PlayerPage() {
     }
   }, [isVideo]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* Stop playing if stream goes offline */
+  /* Stop playing if stream goes offline — полностью сбрасываем аудио */
   useEffect(() => {
-    if (!isLive && isPlaying) {
-      audioRef.current?.pause()
+    if (!isLive) {
+      const audio = audioRef.current
+      if (audio) {
+        audio.pause()
+        audio.src = ''   // сбрасываем src чтобы следующий play не использовал мёртвый поток
+        audio.load()
+      }
       if (videoRef.current) videoRef.current.pause()
-      setIsPlaying(false)
-      toast.warning('Эфир завершён')
+      wasPlayingRef.current = false
+      if (reconnectTimer.current) {
+        clearTimeout(reconnectTimer.current)
+        reconnectTimer.current = null
+      }
+      if (isPlaying) {
+        setIsPlaying(false)
+        toast.warning('Эфир завершён')
+      }
     }
   }, [isLive])
 

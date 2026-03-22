@@ -245,10 +245,7 @@ export function AuthPage() {
                 }
               </button>
 
-              <p className={styles.hint}>
-                Тестовые аккаунты: <code>admin_ttk</code>, <code>petrov_dj</code>, <code>ivanov_a</code>
-                <br />пароль: <code>password</code>
-              </p>
+
             </form>
           )}
 

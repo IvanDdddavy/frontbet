@@ -10,12 +10,13 @@ settings.server.telnet.port := 1234
 
 playlist_path = "/app/media/playlist.m3u"
 
-# Если плейлист не существует — создаём пустой, чтобы Liquidsoap не падал при старте
+# Создаём пустой playlist.m3u если не существует — чтобы не падать при старте
 if not file.exists(playlist_path) then
   file.write(data="#EXTM3U\n", playlist_path)
 end
 
 # reload_mode="watch" — Liquidsoap сам следит за изменениями файла
+# on_fail — когда плейлист пуст или файл не читается, возвращаем blank вместо краша
 music = playlist(
   reload=1,
   reload_mode="watch",
@@ -23,14 +24,15 @@ music = playlist(
   playlist_path
 )
 
-# Запасной источник — тишина если плейлист пуст
+# track_sensitive=false — fallback переключается между источниками
+# не дожидаясь конца трека. Это важно: когда музыка появляется после
+# паузы — Liquidsoap мгновенно переходит с blank() на playlist
 radio = fallback(track_sensitive=false, [music, blank()])
 
-# Нормализация громкости (v2.x синтаксис)
 radio = normalize(radio)
 radio = audio_to_stereo(radio)
 
-# Стримим в Icecast в MP3 128kbps
+# Стримим в Icecast MP3 128kbps
 output.icecast(
   %mp3(bitrate=128),
   host="icecast",

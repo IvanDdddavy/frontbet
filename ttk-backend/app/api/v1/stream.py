@@ -40,6 +40,13 @@ async def update_state(
     state = await set_stream_state(patch)
     state["listeners"] = manager.listeners_count
 
+    # Когда эфир включается — говорим Liquidsoap начать играть
+    # (он мог зависнуть на паузе или конце трека после предыдущего выключения)
+    if patch.get("isLive") is True:
+        from app.services.playlist_sync import _liquidsoap_skip
+        import asyncio
+        asyncio.create_task(_liquidsoap_skip())
+
     # Broadcast new state to all connected WS clients
     await manager.broadcast({
         "type": "stream_state",
