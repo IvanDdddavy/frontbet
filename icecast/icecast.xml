@@ -1,0 +1,49 @@
+<icecast>
+  <location>ТТК Эфирная платформа</location>
+  <admin>admin@ttk.ru</admin>
+  <limits>
+    <clients>100</clients>
+    <sources>5</sources>
+    <queue-size>524288</queue-size>
+    <client-timeout>30</client-timeout>
+    <header-timeout>15</header-timeout>
+    <source-timeout>10</source-timeout>
+  </limits>
+  <authentication>
+    <source-password>ttk_source_pass</source-password>
+    <relay-password>ttk_relay_pass</relay-password>
+    <admin-user>admin</admin-user>
+    <admin-password>ttk_admin_pass</admin-password>
+  </authentication>
+  <hostname>icecast</hostname>
+  <listen-socket>
+    <port>8000</port>
+    <bind-address>0.0.0.0</bind-address>
+  </listen-socket>
+  <mount>
+    <mount-name>/stream</mount-name>
+    <max-listeners>100</max-listeners>
+    <dump-file>/tmp/stream.ogg</dump-file>
+    <stream-name>ТТК Эфир</stream-name>
+    <stream-description>Корпоративное радио ТрансТелеКом</stream-description>
+    <stream-url>http://icecast:8000/stream</stream-url>
+    <genre>Corporate</genre>
+    <public>0</public>
+  </mount>
+  <paths>
+    <basedir>/usr/share/icecast2</basedir>
+    <logdir>/var/log/icecast2</logdir>
+    <webroot>/usr/share/icecast2/web</webroot>
+    <adminroot>/usr/share/icecast2/admin</adminroot>
+    <pidfile>/var/run/icecast2/icecast.pid</pidfile>
+    <alias source="/" dest="/status.xsl"/>
+  </paths>
+  <logging>
+    <accesslog>access.log</accesslog>
+    <errorlog>error.log</errorlog>
+    <loglevel>3</loglevel>
+  </logging>
+  <security>
+    <chroot>0</chroot>
+  </security>
+</icecast>

@@ -1,0 +1,43 @@
+.widget {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(227, 0, 27, 0.15);
+  border: 1px solid rgba(227, 0, 27, 0.3);
+  border-radius: 99px;
+  padding: 3px 10px 3px 7px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ttk-red);
+  animation: pulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+.count {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-narrow);
+  color: var(--ttk-red);
+  min-width: 14px;
+  text-align: center;
+}
+
+.label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+}

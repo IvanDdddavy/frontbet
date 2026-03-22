@@ -1,0 +1,55 @@
+.logoWrap {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+}
+
+.logoBox {
+  width: var(--s, 38px);
+  height: var(--s, 38px);
+  border: 2.5px solid var(--ttk-red);
+  border-radius: 5px;
+  transform: rotate(-8deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+  transition: box-shadow var(--t-base);
+}
+
+.logoWrap:hover .logoBox {
+  box-shadow: 0 0 12px rgba(227,0,27,0.4);
+}
+
+.logoText {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: calc(var(--s, 38px) * 0.37);
+  color: var(--ttk-red);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.logoBrand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brandTop {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.07em;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.brandBot {
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.03em;
+  font-weight: 400;
+}

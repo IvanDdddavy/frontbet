@@ -1,0 +1,12 @@
+.wrap {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  /* height set dynamically by ResizeObserver */
+}

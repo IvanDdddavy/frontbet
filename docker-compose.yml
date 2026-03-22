@@ -1,0 +1,131 @@
+services:
+
+  # ── PostgreSQL ─────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: ttk_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ttk
+      POSTGRES_PASSWORD: ttk_pass
+      POSTGRES_DB:       ttk_radio
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ttk -d ttk_radio"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Redis ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: ttk_redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ── Icecast2 — audio streaming ─────────────────────────
+  icecast:
+    image: libretime/icecast:2.4.4
+    container_name: ttk_icecast
+    restart: unless-stopped
+    ports:
+      - "8080:8000"
+    environment:
+      - ICECAST_SOURCE_PASSWORD=ttk_source_pass
+      - ICECAST_RELAY_PASSWORD=ttk_relay_pass
+      - ICECAST_ADMIN_PASSWORD=ttk_admin_pass
+      - ICECAST_ADMIN_USER=admin
+      - ICECAST_HOSTNAME=localhost
+      - ICECAST_MAX_CLIENTS=100
+      - ICECAST_MAX_SOURCES=5
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:8000/ || exit 0"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ── Liquidsoap — auto-playlist source for Icecast ────────
+  liquidsoap:
+    image: savonet/liquidsoap:v2.2.5
+    container_name: ttk_liquidsoap
+    restart: unless-stopped
+    volumes:
+      - media_data:/app/media
+      - ./icecast/radio.liq:/radio.liq:ro
+    command: /radio.liq
+    depends_on:
+      icecast:
+        condition: service_healthy
+
+  # ── Backend (FastAPI) ──────────────────────────────────
+  backend:
+    build:
+      context: ./ttk-backend
+      dockerfile: Dockerfile
+    container_name: ttk_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL:    postgresql+asyncpg://ttk:ttk_pass@postgres:5432/ttk_radio
+      REDIS_URL:       redis://redis:6379/0
+      STREAM_URL:      http://icecast:8000/stream
+      PUBLIC_STREAM_URL: /stream
+      FRONTEND_URL:    http://localhost:80
+      ICECAST_HOST:    icecast
+      ICECAST_PORT:    "8000"
+      ICECAST_SOURCE_PASSWORD: ttk_source_pass
+      MEDIA_DIR:       /app/media
+      SECRET_KEY:      change-me-please-use-openssl-rand-hex-32
+      CORS_ORIGINS:    http://localhost:80,http://localhost:5173
+      SMTP_HOST:       ""
+      SMTP_PORT:       "587"
+      SMTP_USER:       ""
+      SMTP_PASSWORD:   ""
+      SMTP_FROM:       noreply@ttk.ru
+      SMTP_FROM_NAME:  "ТТК Эфирная платформа"
+    volumes:
+      - media_data:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "
+        alembic upgrade head &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2
+      "
+
+  # ── Frontend (React + Nginx) ───────────────────────────
+  frontend:
+    build:
+      context: ./ttk-radio
+      dockerfile: Dockerfile
+      args:
+        VITE_USE_MOCKS: "false"
+        VITE_STREAM_URL: "/stream"
+        VITE_WS_URL: "ws://localhost:8000/ws"
+    container_name: ttk_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
+  media_data:

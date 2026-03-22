@@ -1,0 +1,360 @@
+.page {
+  min-height: calc(100vh - 52px);
+  background: var(--ttk-surface);
+  padding: 24px 20px 40px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pageTitle {
+  font-family: var(--font-narrow);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ttk-text);
+  letter-spacing: 0.01em;
+}
+
+.countBadge {
+  background: var(--ttk-surface2);
+  border: 1px solid var(--ttk-border);
+  border-radius: 99px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--ttk-muted);
+}
+
+/* Filters */
+.filtersCard {
+  background: var(--ttk-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 14px 16px;
+}
+
+.filtersRow {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 140px;
+}
+
+.filterLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ttk-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.filterInput {
+  border: 1.5px solid var(--ttk-border);
+  border-radius: var(--radius-md);
+  padding: 7px 10px;
+  font-size: 13px;
+  color: var(--ttk-text);
+  background: var(--ttk-white);
+  outline: none;
+  transition: border-color var(--t-base);
+  height: 34px;
+  font-family: var(--font-main);
+  width: 100%;
+}
+
+.filterInput:focus { border-color: var(--ttk-red); box-shadow: 0 0 0 3px var(--ttk-red-light); }
+
+.clearBtn {
+  background: transparent;
+  border: 1.5px solid var(--ttk-border);
+  border-radius: var(--radius-md);
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-narrow);
+  letter-spacing: 0.04em;
+  color: var(--ttk-muted);
+  cursor: pointer;
+  height: 34px;
+  white-space: nowrap;
+  transition: all var(--t-base);
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+.clearBtn:hover { border-color: var(--ttk-red); color: var(--ttk-red); }
+
+/* Table */
+.tableCard {
+  background: var(--ttk-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  background: var(--ttk-surface);
+  color: var(--ttk-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 2px solid var(--ttk-border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--ttk-border);
+  vertical-align: middle;
+}
+
+.table tr:last-child td { border-bottom: none; }
+.table tbody tr:hover td { background: var(--ttk-red-light); }
+
+.loginCell {
+  font-weight: 700;
+  font-family: var(--font-narrow);
+  letter-spacing: 0.02em;
+  color: var(--ttk-text);
+}
+
+.dateCell {
+  color: var(--ttk-muted);
+  white-space: nowrap;
+}
+
+.rolesCell {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.roleBadge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-narrow);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.roleUser  { background: #eef2ff; color: #3b4bc8; }
+.roleHost  { background: #fff3e0; color: #b85c00; }
+.roleAdmin { background: var(--ttk-red-light); color: var(--ttk-red-dark); }
+
+.emptyCell {
+  text-align: center;
+  padding: 40px;
+  color: var(--ttk-muted);
+}
+
+.loadingRow {
+  padding: 40px;
+  text-align: center;
+  color: var(--ttk-muted);
+  font-size: 13px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 4px;
+}
+
+.actionBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-xs);
+  background: var(--ttk-surface);
+  border: 1.5px solid var(--ttk-border);
+  color: var(--ttk-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--t-base);
+  flex-shrink: 0;
+}
+
+.actionBtn:hover { border-color: var(--ttk-red); color: var(--ttk-red); background: var(--ttk-red-light); }
+.actionBtn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+.actionBtnDanger:hover { border-color: #c0392b; color: #c0392b; background: #fdf0ef; }
+
+/* Modal form */
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modalLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ttk-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rule {
+  font-weight: 400;
+  text-transform: none;
+  color: #aaa;
+}
+
+.modalInput {
+  border: 1.5px solid var(--ttk-border);
+  border-radius: var(--radius-md);
+  padding: 9px 12px;
+  font-size: 14px;
+  color: var(--ttk-text);
+  background: var(--ttk-white);
+  outline: none;
+  transition: border-color var(--t-base);
+  font-family: var(--font-main);
+}
+
+.modalInput:focus { border-color: var(--ttk-red); box-shadow: 0 0 0 3px var(--ttk-red-light); }
+.inputErr { border-color: var(--ttk-red) !important; }
+
+.fieldErr {
+  font-size: 12px;
+  color: var(--ttk-red);
+}
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ttk-border);
+}
+
+.btnPrimary {
+  background: var(--ttk-red);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-narrow);
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background var(--t-base);
+}
+
+.btnPrimary:hover { background: var(--ttk-red-dark); }
+
+.btnSecondary {
+  background: transparent;
+  border: 1.5px solid var(--ttk-border);
+  border-radius: var(--radius-md);
+  padding: 9px 16px;
+  font-size: 13px;
+  font-family: var(--font-narrow);
+  font-weight: 700;
+  color: var(--ttk-muted);
+  cursor: pointer;
+  transition: all var(--t-base);
+}
+
+.btnSecondary:hover { border-color: var(--ttk-text); color: var(--ttk-text); }
+
+/* Roles grid */
+.rolesGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.roleOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--ttk-border);
+  transition: border-color var(--t-base);
+}
+
+.roleOption:hover { border-color: var(--ttk-red); }
+.roleDisabled { opacity: 0.5; cursor: not-allowed; }
+.roleDisabled:hover { border-color: var(--ttk-border); }
+
+.roleOption input[type='checkbox'] { accent-color: var(--ttk-red); width: 15px; height: 15px; flex-shrink: 0; }
+
+.restrictedNote {
+  font-size: 11px;
+  color: var(--ttk-muted);
+  margin-left: auto;
+}
+
+/* ── Elevated interactions ────────── */
+.tableCard {
+  transition: box-shadow var(--t-base);
+}
+
+.table tbody tr {
+  transition: background var(--t-fast);
+}
+
+.actionBtn {
+  transition: all var(--t-base);
+}
+.actionBtn:hover {
+  transform: translateY(-1px);
+}
+
+.countBadge {
+  font-weight: 600;
+  border-radius: var(--radius-full);
+}
+
+.filtersCard {
+  transition: box-shadow var(--t-base);
+}
+.filtersCard:focus-within {
+  box-shadow: var(--shadow-md);
+}

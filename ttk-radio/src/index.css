@@ -1,0 +1,150 @@
+/* ═══════════════════════════════════════════════════
+   ТТК Design Tokens v2 — Elevated
+   ═══════════════════════════════════════════════════ */
+:root {
+  /* Brand */
+  --ttk-red:         #E3001B;
+  --ttk-red-dark:    #C0001A;
+  --ttk-red-deeper:  #9A0014;
+  --ttk-red-light:   #FFF0F2;
+  --ttk-red-muted:   #FFD6DA;
+  --ttk-red-glow:    rgba(227, 0, 27, 0.18);
+
+  /* Nav / dark surfaces */
+  --ttk-nav:         #181818;
+  --ttk-nav-border:  #272727;
+  --ttk-nav-hover:   #222222;
+  --ttk-dark:        #111111;
+
+  /* Text */
+  --ttk-text:        #111111;
+  --ttk-text-2:      #3D3D3D;
+  --ttk-muted:       #747474;
+  --ttk-hint:        #ABABAB;
+
+  /* Surfaces */
+  --ttk-bg:          #F0F0F0;
+  --ttk-surface:     #F7F7F7;
+  --ttk-surface2:    #EFEFEF;
+  --ttk-white:       #FFFFFF;
+
+  /* Borders */
+  --ttk-border:      #E2E2E2;
+  --ttk-border-2:    #D0D0D0;
+
+  /* Typography */
+  --font-main:   'Inter', 'PT Sans', sans-serif;
+  --font-narrow: 'PT Sans Narrow', sans-serif;
+  --font-brand:  'PT Sans Narrow', sans-serif;
+
+  /* Radius */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  /* Shadows — layered for depth */
+  --shadow-xs:   0 1px 2px rgba(0,0,0,0.06);
+  --shadow-sm:   0 2px 6px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-red:  0 4px 20px rgba(227,0,27,0.30);
+  --shadow-nav:  0 1px 0 rgba(255,255,255,0.04);
+
+  /* Transitions */
+  --t-fast:  80ms ease;
+  --t-base:  160ms ease;
+  --t-slow:  280ms ease;
+  --t-spring: 240ms cubic-bezier(0.34,1.56,0.64,1);
+
+  /* modal */
+  --shadow-modal: 0 24px 64px rgba(0,0,0,0.22), 0 4px 16px rgba(0,0,0,0.10);
+}
+
+/* ── Reset ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  font-family: var(--font-main);
+  color: var(--ttk-text);
+  background: var(--ttk-bg);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ─────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D8D8D8; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #B8B8B8; }
+
+/* ── Form elements ─────────────────────────────── */
+button  { font-family: var(--font-main); cursor: pointer; }
+input, textarea, select { font-family: var(--font-main); }
+a { text-decoration: none; }
+
+/* ── Focus ─────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--ttk-red);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ── Utility ───────────────────────────────────── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}
+
+/* ── Page transition ───────────────────────────── */
+.page-enter {
+  animation: pageIn var(--t-slow) both;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Fade in ───────────────────────────────────── */
+.fade-in {
+  animation: fadeIn var(--t-base) both;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Pulse dot ─────────────────────────────────── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+/* ── Spin ──────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Slide up ──────────────────────────────────── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* ── Slide in right ────────────────────────────── */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Record pulse ──────────────────────────────── */
+@keyframes rec-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(227,0,27,0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(227,0,27,0); }
+}
