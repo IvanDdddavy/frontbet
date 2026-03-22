@@ -183,8 +183,8 @@ export const handlers = [
 
   http.post('/api/media/playlists', async ({ request }) => {
     const { title } = await request.json() as any
-    const pl: MockPlaylist = { id: String(++nextId), title: title || 'Плейлист', loopMode: false, shuffleMode: false, items: [] }
-    mockPlaylists[id] = pl
+    const pl = { id: String(++nextId), title: title || 'Плейлист', loopMode: false, shuffleMode: false, items: [] as any[] }
+    mockPlaylists[pl.id] = pl
     return HttpResponse.json(pl, { status: 201 })
   }),
 

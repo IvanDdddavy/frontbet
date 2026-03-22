@@ -34,13 +34,16 @@ services:
       timeout: 3s
       retries: 10
 
-  # ── Icecast2 — audio streaming ─────────────────────────
+  # ── Icecast2 ───────────────────────────────────────────
   icecast:
     image: libretime/icecast:2.4.4
     container_name: ttk_icecast
     restart: unless-stopped
     ports:
       - "8080:8000"
+    # Монтируем наш icecast.xml — он перезаписывает дефолтный конфиг
+    volumes:
+      - ./icecast/icecast.xml:/etc/icecast2/icecast.xml:ro
     environment:
       - ICECAST_SOURCE_PASSWORD=ttk_source_pass
       - ICECAST_RELAY_PASSWORD=ttk_relay_pass
@@ -56,13 +59,13 @@ services:
       retries: 5
       start_period: 10s
 
-  # ── Liquidsoap — auto-playlist source for Icecast ────────
+  # ── Liquidsoap ─────────────────────────────────────────
   liquidsoap:
     image: savonet/liquidsoap:v2.2.5
     container_name: ttk_liquidsoap
     restart: unless-stopped
     volumes:
-      - media_data:/app/media
+      - media_data:/app/media          # общий том с бэкендом (там лежат mp3/ogg)
       - ./icecast/radio.liq:/radio.liq:ro
     command: /radio.liq
     depends_on:
@@ -95,7 +98,7 @@ services:
       SMTP_FROM:       noreply@ttk.ru
       SMTP_FROM_NAME:  "ТТК Эфирная платформа"
     volumes:
-      - media_data:/app/media
+      - media_data:/app/media          # тот же том что у Liquidsoap
     ports:
       - "8000:8000"
     depends_on:
@@ -117,7 +120,8 @@ services:
       args:
         VITE_USE_MOCKS: "false"
         VITE_STREAM_URL: "/stream"
-        VITE_WS_URL: "ws://localhost:8000/ws"
+        # WS идёт через nginx-прокси — не хардкодим порт бэкенда
+        VITE_WS_URL: ""
     container_name: ttk_frontend
     restart: unless-stopped
     ports:

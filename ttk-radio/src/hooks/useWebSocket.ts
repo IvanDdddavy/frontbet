@@ -10,7 +10,11 @@ type WsMessage =
   | { type: 'listeners_update'; count: number }
   | { type: 'volume_change'; volume: number }
 
-const WS_URL: string | null = (import.meta.env.VITE_WS_URL as string) || null
+// Если VITE_WS_URL не задан или пустой — строим URL из текущего хоста (nginx проксирует /ws → бэкенд)
+const _envWs = import.meta.env.VITE_WS_URL as string | undefined
+const WS_URL: string | null = (_envWs && _envWs.trim())
+  ? _envWs.trim()
+  : (import.meta.env.VITE_USE_MOCKS === 'true' ? null : `ws://${location.host}/ws`)
 
 type WsHandle = { send: (d: string) => void; close: () => void }
 

@@ -1,37 +1,38 @@
 #!/usr/bin/liquidsoap
-# ТТК Radio - Liquidsoap stream source
-# Plays files from /media directory in rotation, loops playlist
+# ТТК Radio — Liquidsoap v2.x
 
-set("log.level", 3)
-set("log.stdout", true)
-set("server.socket", false)
-set("server.telnet", true)
-set("server.telnet.bind_addr", "0.0.0.0")
-set("server.telnet.port", 1234)
+settings.log.level := 3
+settings.log.stdout := true
+settings.server.socket := false
+settings.server.telnet := true
+settings.server.telnet.bind_addr := "0.0.0.0"
+settings.server.telnet.port := 1234
 
-# Load playlist from media directory
-# Only ogg/mp3/wav are natively supported by Liquidsoap
-playlist = playlist(
+playlist_path = "/app/media/playlist.m3u"
+
+# Если плейлист не существует — создаём пустой, чтобы Liquidsoap не падал при старте
+if not file.exists(playlist_path) then
+  file.write(data="#EXTM3U\n", playlist_path)
+end
+
+# reload_mode="watch" — Liquidsoap сам следит за изменениями файла
+music = playlist(
   reload=1,
   reload_mode="watch",
   mode="normal",
-  mime_type="",
-  "/app/media/playlist.m3u"
+  playlist_path
 )
 
-# Fallback to silence if playlist is empty
-radio = fallback(
-  track_sensitive=false,
-  [playlist, blank()]
-)
+# Запасной источник — тишина если плейлист пуст
+radio = fallback(track_sensitive=false, [music, blank()])
 
-# Apply some basic processing
+# Нормализация громкости (v2.x синтаксис)
 radio = normalize(radio)
 radio = audio_to_stereo(radio)
 
-# Output to Icecast
+# Стримим в Icecast в MP3 128kbps
 output.icecast(
-  %ogg(%vorbis(quality=0.6)),
+  %mp3(bitrate=128),
   host="icecast",
   port=8000,
   password="ttk_source_pass",

@@ -9,8 +9,9 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 
 from app.core.config import get_settings
-from app.core.database import engine, Base
+from app.core.database import engine, Base, AsyncSessionLocal
 from app.ws.manager import manager
+from app.services.playlist_sync import ensure_playlist_file, rebuild_playlist_from_db
 import app.models  # noqa: F401
 
 from app.api.v1 import auth, users, media, messages, stream
@@ -26,6 +27,13 @@ async def lifespan(app: FastAPI):
 
     Path(settings.MEDIA_DIR).mkdir(parents=True, exist_ok=True)
     (Path(settings.MEDIA_DIR) / "voices").mkdir(exist_ok=True)
+
+    # Гарантируем что playlist.m3u существует — иначе Liquidsoap падает
+    ensure_playlist_file()
+
+    # Восстанавливаем плейлист из БД (на случай перезапуска бэкенда)
+    async with AsyncSessionLocal() as db:
+        await rebuild_playlist_from_db(db)
 
     await manager.startup()
     yield

@@ -10,7 +10,10 @@ import { streamApi } from '../../api/stream'
 import styles from './PlayerPage.module.css'
 import { AudioVisualizer } from '../../components/player/AudioVisualizer'
 
-const STREAM_URL = (import.meta.env.VITE_STREAM_URL as string) || null
+// Если VITE_STREAM_URL пустой — используем /stream (nginx проксирует на Icecast)
+const _envStream = import.meta.env.VITE_STREAM_URL as string | undefined
+const STREAM_URL = (_envStream && _envStream.trim()) ? _envStream.trim()
+  : (import.meta.env.VITE_USE_MOCKS === 'true' ? null : '/stream')
 
 export function PlayerPage() {
   const { user, token } = useAuthStore()
